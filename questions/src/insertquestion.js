@@ -134,7 +134,18 @@ const questions = async (req, res) => {
                     created_by 
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(),?)`;
 
-            let insertData = [question, option1, option2, option3, option4, right_option, difficulty_level, description, note];
+            let insertData = [
+              question,
+              option1,
+              option2,
+              option3,
+              option4,
+              right_option,
+              difficulty_level,
+              description,
+              note,
+              created_by,
+            ];
 
             let result = await queryAsync(insertQuestionQuery, insertData);
 

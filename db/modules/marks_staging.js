@@ -3,6 +3,7 @@ const pingdb = require("../db_connection");
 const marksStagingTable = `
   CREATE TABLE IF NOT EXISTS marks_staging (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     obtained_mark FLOAT NOT NULL,
     staged_type VARCHAR(50) NOT NULL,
     total_mark FLOAT NOT NULL,

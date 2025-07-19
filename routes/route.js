@@ -2,22 +2,16 @@
 const express = require("express");
 
 // Creating an instance of the express router
-const Router = express.Router(); 
+const Router = express.Router();
 
 // Importing the token verification middleware
 const verify_token = require("../helper/jwt/verify_jwt_token");
 
 // Endpoint for user signup
-Router.post(
-  "/auth/signup",
-  require("../auth/src/user_signup").user_signup
-);
+Router.post("/auth/signup", require("../auth/src/user_signup").user_signup);
 
 // Endpoint for user login
-Router.post(
-  "/auth/login",
-  require("../auth/src/user_login").user_login
-);
+Router.post("/auth/login", require("../auth/src/user_login").user_login);
 Router.post(
   "/auth/logout",
   verify_token,
@@ -28,19 +22,11 @@ Router.post(
 Router.post("/auth/send_otp", require("../auth/src/send_otp").sendOtp);
 
 // Endpoint for verify otp
-Router.post(
-  "/auth/verify_otp",
-  require("../auth/src/verify_otp").verifyOtp
-);
+Router.post("/auth/verify_otp", require("../auth/src/verify_otp").verifyOtp);
 
-Router.post(
-  "/auth/verify",
-  require("../auth/src/verify").verification
-);
+Router.post("/auth/verify", require("../auth/src/verify").verification);
 
-Router.post(
-  "/question", require("../questions/src/insertquestion").questions
-);
+Router.post("/question", require("../questions/src/insertquestion").questions);
 Router.get(
   "/getquestions",
   // verify_token,
@@ -51,16 +37,17 @@ Router.get(
   // verify_token,
   require("../questions/src/getquestionbyID").getquestionbyid
 );
-// Router.put(
-//   "/question/:question_id",
-//   verify_token,
-//   require("../questions/src/updatequestions").updatequestion
-// );
-// Router.delete(
-//   "/question/:question_id",
-//   verify_token,
-//   require("../questions/src/deletequestion").deletequestion
-// );
+//---- Question Update and Delete -----------
+Router.put(
+  "/question/:question_id",
+  // verify_token,
+  require("../questions/src/updatequestions").updatequestion
+);
+Router.delete(
+  "/question/:question_id",
+  // verify_token,
+  require("../questions/src/deletequestion").deletequestion
+);
 // Router.post(
 //   "/exam_question_mapping",
 //   verify_token,
@@ -237,8 +224,6 @@ Router.post(
   require("../transaction/src/save_order").saveOrder
 );
 
-
-
 // const multer = require("multer");
 // // const upload = multer({ dest: "uploads/" }); // Save files in /uploads folder
 
@@ -249,13 +234,11 @@ Router.post(
 //   },
 // });
 
+// login endpoint
 
-
-// login endpoint 
-
-Router.post("/login",require("../login/src/user_login").login_user)
-Router.post("/register",require("../login/src/register").register_user)
-Router.patch("/edituser/:user_id",require("../login/src/edit_user").edit_user)
+Router.post("/login", require("../login/src/user_login").login_user);
+Router.post("/register", require("../login/src/register").register_user);
+Router.patch("/edituser/:user_id", require("../login/src/edit_user").edit_user);
 // Router.post("/upload",require("../resume/src/upload_resume").upload_resume)
 
 // Router.post("/upload", upload.single("file"), require("../resume/src/upload_resume").upload_resume);
@@ -270,12 +253,16 @@ Router.post("/upload", (req, res, next) => {
   });
 });
 
-
-
 // stages api
 
-Router.post("/marks/submit",require("../dashboard/src/user_interview").submit_marks)
+Router.post(
+  "/marks/submit",
+  require("../dashboard/src/user_interview").submit_marks
+);
+// get stage marks
+Router.get("/marks/get", require("../dashboard/src/getstage").get_stage_marks);
 
 
-
+// get average marks
+Router.get("/marks/average", require("../dashboard/src/getavrage").get_avg_marks);
 module.exports = Router;

@@ -1,8 +1,8 @@
 const util = require('util');
 const indrayniDB = require('../../db/db_connection');
 const queryAsync = util.promisify(indrayniDB.query).bind(indrayniDB);
-const exam_map_unmap = require('../../exam/src/exam_que_mapping');
-
+// const exam_map_unmap = require('../../exam/src/exam_que_mapping');
+const exam_map_unmap = require("../../db/modules/mapping_exam_question");
 const updatequestion = async (req, res) => {
     try {
         const question_id = req.params.question_id;
