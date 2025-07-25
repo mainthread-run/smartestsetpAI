@@ -262,7 +262,23 @@ Router.post(
 // get stage marks
 Router.get("/marks/get", require("../dashboard/src/getstage").get_stage_marks);
 
-
 // get average marks
-Router.get("/marks/average", require("../dashboard/src/getavrage").get_avg_marks);
+Router.get(
+  "/marks/average",
+  require("../dashboard/src/getavrage").get_avg_marks
+);
+
+// get overall-progress
+Router.get(
+  "/marks/progress",
+  require("../dashboard/src/getoverall_progress").get_progress
+);
+
+// get progress
+Router.get(
+  "/marks/progress/details",require("../dashboard/src/getprogress").get_all_progress
+);
+
+// GET http://localhost:5000/api/getprogress?user_id=8
+
 module.exports = Router;

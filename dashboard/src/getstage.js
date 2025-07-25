@@ -31,7 +31,7 @@ const get_stage_marks = async (req, res) => {
 
     return res.status(200).json(result[0]);
   } catch (error) {
-    console.error("Error in get_stage_marks:", error);
+    console.error("Error in the get_stage_marks:", error);
     return res
       .status(500)
       .json({ message: "Something went wrong, please try again" });

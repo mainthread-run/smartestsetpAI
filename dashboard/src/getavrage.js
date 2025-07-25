@@ -14,16 +14,14 @@ const get_avg_marks = async (req, res) => {
 
     const sql = `
       SELECT 
-        ROUND(SUM(obtained_mark), 2) AS total_obtained,
-        ROUND(SUM(total_mark), 2) AS total_possible,
-        ROUND((SUM(obtained_mark) / SUM(total_mark)) * 100, 2) AS percentage
+        ROUND(AVG(obtained_mark), 2) AS average_obtained
       FROM marks_staging
       WHERE user_id = ?
     `;
 
     const result = await queryAsync(sql, [user_id]);
 
-    if (result.length === 0 || result[0].total_obtained === null) {
+    if (!result || result.length === 0 || result[0].average_obtained === null) {
       return res
         .status(404)
         .json({ message: "No marks data found for this user." });
@@ -31,9 +29,8 @@ const get_avg_marks = async (req, res) => {
 
     return res.status(200).json({
       user_id: parseInt(user_id),
-      total_obtained: result[0].total_obtained,
-      total_possible: result[0].total_possible,
-      percentage: result[0].percentage,
+      average_obtained: result[0].average_obtained
+      // total_stages: result[0].total_stages,
     });
   } catch (error) {
     console.error("Error in get_avg_marks:", error);
