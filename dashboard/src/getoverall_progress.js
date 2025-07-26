@@ -10,7 +10,7 @@ const get_progress = async (req, res) => {
       return res.status(400).json({ message: "user_id is required" });
     }
 
-    // 1 stage = 100 total marks (hardcoded policy)
+    // 1 stage = 100 total marks (hardcoded )
     const FULL_MARKS_PER_STAGE = 100;
 
     const sql = `
