@@ -3,11 +3,11 @@ const fs = require('fs');
 
 const file_upload = (image, folder) => {
     const extname = path.extname(image.name).toLowerCase();
-    const allowedExtensions = ['.png', '.jpeg', '.jpg'];
+    const allowedExtensions = ['.png', '.jpeg', '.jpg', '.pdf', '.doc', '.docx'];
 
     // Check if the file extension is allowed
     if (!allowedExtensions.includes(extname)) {
-        return { status: false, message: "Please provide a PNG or JPEG file." };
+        return { status: false, message: "Please provide a PNG, JPEG, PDF, DOC, or DOCX file." };
     }
 
     const newFilename = image.name.split(" ").join("_");

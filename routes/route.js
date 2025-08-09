@@ -281,4 +281,28 @@ Router.get(
 
 // GET http://localhost:5000/api/getprogress?user_id=8
 
+// user update route
+Router.put(
+  "/user/update",
+  // verify_token,
+  require("../dashboard/src/updateuser").user_update
+);
+
+// upload resume route
+Router.post(
+  "/upload_resume",
+  // verify_token,
+  require("../dashboard/src/fileuploade").upload_resume
+);
+
+// forgot password routes
+Router.post(
+  "/forgot-password",
+  require("../helper/forgotpasswordcontroller").forgotPassword
+);
+Router.patch(
+  "/reset-password",
+  require("../helper/forgotpasswordcontroller").resetPassword
+);
+
 module.exports = Router;
