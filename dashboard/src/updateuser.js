@@ -45,21 +45,21 @@ const user_update = async (req, res) => {
 
     // Update user
     const updateQuery = `
-            UPDATE users 
-            SET 
-                mobile = ?, 
-                email = ?, 
-                first_name = ?, 
-                last_name = ?, 
-                education = ?, 
-                city = ?, 
-                district = ?, 
-                state = ?, 
-                pin_code = ?, 
-                fcm_token = ?, 
-                updated_at = NOW()
-            WHERE user_id = ?
-        `;
+      UPDATE users 
+      SET 
+        mobile = ?, 
+        email = ?, 
+        first_name = ?, 
+        last_name = ?, 
+        education = ?, 
+        city = ?, 
+        district = ?, 
+        state = ?, 
+        pin_code = ?, 
+        fcm_token = ?, 
+        updated_at = NOW()
+      WHERE user_id = ?
+    `;
 
     const updateValues = [
       mobile || userResult[0].mobile,
@@ -77,7 +77,30 @@ const user_update = async (req, res) => {
 
     await queryAsync(updateQuery, updateValues);
 
-    return res.json({ message: "User details updated successfully" });
+    // 👇 Profile completion calculation
+    const updatedUser = {
+      mobile: updateValues[0],
+      email: updateValues[1],
+      first_name: updateValues[2],
+      last_name: updateValues[3],
+      education: updateValues[4],
+      city: updateValues[5],
+      district: updateValues[6],
+      state: updateValues[7],
+      pin_code: updateValues[8],
+      fcm_token: updateValues[9],
+    };
+
+    const fields = Object.keys(updatedUser);
+    const filled = fields.filter(
+      (f) => updatedUser[f] && updatedUser[f].toString().trim() !== ""
+    ).length;
+    const profileCompletion = Math.round((filled / fields.length) * 100);
+
+    return res.json({
+      message: "User details updated successfully",
+      profile_completion: profileCompletion + "%",
+    });
   } catch (error) {
     console.error("Error in user_update:", error);
     return res.status(500).json({ message: "Internal server error" });

@@ -276,7 +276,8 @@ Router.get(
 
 // get progress
 Router.get(
-  "/marks/progress/details",require("../dashboard/src/getprogress").get_all_progress
+  "/marks/progress/details",
+  require("../dashboard/src/getprogress").get_all_progress
 );
 
 // GET http://localhost:5000/api/getprogress?user_id=8
@@ -298,11 +299,55 @@ Router.post(
 // forgot password routes
 Router.post(
   "/forgot-password",
-  require("../helper/forgotpasswordcontroller").forgotPassword
+  require("../helper/forgotpasswordcontroller").forgot_password
 );
+Router.get("/verify-token",
+   require("../helper/verifytoken").verify_token);
 Router.patch(
   "/reset-password",
-  require("../helper/forgotpasswordcontroller").resetPassword
+  require("../helper/resetpassword").reset_password
+);
+// stage performance api
+Router.get(
+  "/marks/stage-performance",
+  require("../dashboard/src/stageperformance").get_stage_performance
+);
+
+// leaderboard
+// total participants
+Router.get(
+  "/total-participants",
+  require("../dashboard/src/total_participants").get_total_participants
+);
+
+
+// skill assesment api
+// post api
+Router.post(
+  "/marks/skill-assessment_marks",
+  require("../dashboard/src/skill_ass_marks").save_skill_assessment
+);
+
+Router.get(
+  "/marks/skill-assessment",
+  require("../dashboard/src/skill_asessment").get_skill_assessment
+);
+
+// total attempts
+Router.get(
+  "/marks/total-attempts",
+  require("../dashboard/src/total_attempts").get_total_attempts
+);
+// success rate
+Router.get(
+  "/marks/success-rate",
+  require("../dashboard/src/get_success_rate").get_success_rate
+);
+
+//contact support
+Router.post(
+  "/contact",
+  require("../dashboard/src/contact_support").submit_support_request
 );
 
 module.exports = Router;

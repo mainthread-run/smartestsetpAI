@@ -1,73 +1,50 @@
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
-const pingdb = require("../db_connection");
-const mailSender = require("../utils/mailSender");
+const util = require("util");
+const pingdb = require("../db/db_connection");
+const send_email = require("../helper/send_email");
 
-// POST /forgot-password
-exports.forgotPassword = (req, res) => {
-  const { email } = req.body;
+const queryAsync = util.promisify(pingdb.query).bind(pingdb);
 
-  pingdb.query(
-    "SELECT * FROM users WHERE email = ?",
-    [email],
-    (err, results) => {
-      if (err) return res.status(500).json({ message: "DB error", error: err });
-      if (results.length === 0) {
-        return res.json({ message: "If email exists, reset link sent" }); // generic for security
-      }
+const forgot_password = async (req, res) => {
+  try {
+    const { email } = req.body;
 
-      const token = crypto.randomBytes(32).toString("hex");
-      const expireTime = Date.now() + 15 * 60 * 1000;
-
-      pingdb.query(
-        "UPDATE users SET reset_token = ?, reset_token_expire = ? WHERE email = ?",
-        [token, expireTime, email],
-        async (err) => {
-          if (err)
-            return res.status(500).json({ message: "DB error", error: err });
-
-          const resetLink = `http://localhost:3000/reset-password?token=${token}`;
-          await mailSender(
-            email,
-            "Password Reset",
-            `<p>Click <a href="${resetLink}">here</a> to reset password.</p>`
-          );
-
-          res.json({ message: "If email exists, reset link sent" });
-        }
-      );
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
-  );
-};
 
-// PATCH /reset-password
-exports.resetPassword = (req, res) => {
-  const { token, password, confirmPassword } = req.body;
+    // Check if user exists
+    const [user] = await queryAsync("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+    if (!user) {
+      // Always send same response for security
+      return res.json({ message: "If email exists, reset link sent" });
+    }
 
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: "Passwords do not match" });
+    // Generate token
+    const token = crypto.randomBytes(32).toString("hex");
+    const expireTime = Date.now() + 15 * 60 * 1000; // 15 min
+
+    // Save token in DB
+    await queryAsync(
+      "UPDATE users SET reset_token = ?, reset_token_expire = ? WHERE email = ?",
+      [token, expireTime, email]
+    );
+
+    // Send reset link
+    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+    await send_email(
+      email,
+      "Password Reset",
+      `<p>Click <a href="${resetLink}">here</a> to reset your password. Link valid for 15 minutes.</p>`
+    );
+
+    return res.json({ message: "If email exists, reset link sent" });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-  pingdb.query(
-    "SELECT * FROM users WHERE reset_token = ? AND reset_token_expire > ?",
-    [token, Date.now()],
-    async (err, results) => {
-      if (err) return res.status(500).json({ message: "DB error", error: err });
-      if (results.length === 0) {
-        return res.status(400).json({ message: "Invalid or expired token" });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      pingdb.query(
-        "UPDATE users SET password = ?, reset_token = NULL, reset_token_expire = NULL WHERE user_id = ?",
-        [hashedPassword, results[0].user_id],
-        (err) => {
-          if (err)
-            return res.status(500).json({ message: "DB error", error: err });
-          res.json({ message: "Password updated successfully" });
-        }
-      );
-    }
-  );
 };
+
+module.exports = { forgot_password };
