@@ -343,6 +343,16 @@ Router.get(
   "/marks/success-rate",
   require("../dashboard/src/get_success_rate").get_success_rate
 );
+// leaderboard rank api
+Router.get(
+  "/leaderboard",
+  require("../dashboard/src/get_rank_leaderboard").get_leaderboard
+)
+
+Router.get(
+  "/my-rank",
+  require("../dashboard/src/get_rank_leaderboard").get_my_rank
+);
 
 //contact support
 Router.post(
