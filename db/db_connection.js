@@ -23,12 +23,18 @@ const connection = mysql.createConnection({
   // database: "smartstepai",
   // port: "3307",
 
-  DB_HOST: gondola.proxy.rlwy.net,
-  DB_PORT: 35752,
-  DB_USER: root,
-  DB_PASS: FucZVLgwvCnWLImsuBrJoMEWsFPVSiFb,
-  DB_NAME: railway,
-  PORT: 3000,
+  // DB_HOST: gondola.proxy.rlwy.net,
+  // DB_PORT: 35752,
+  // DB_USER: root,
+  // DB_PASS: FucZVLgwvCnWLImsuBrJoMEWsFPVSiFb,
+  // DB_NAME: railway,
+  // // PORT: 3306,
+  host: gondola.proxy.rlwy.net,
+  port: 35752,
+  user: root,
+  password: FucZVLgwvCnWLImsuBrJoMEWsFPVSiFb,
+  database : railway,
+  // PORT: 3306,
 });
 
 // Connect to MySQL
