@@ -29,11 +29,11 @@ const connection = mysql.createConnection({
   // DB_PASS: FucZVLgwvCnWLImsuBrJoMEWsFPVSiFb,
   // DB_NAME: railway,
   // // PORT: 3306,
-  host: gondola.proxy.rlwy.net,
+  host: "gondola.proxy.rlwy.net",
   port: 35752,
-  user: root,
-  password: FucZVLgwvCnWLImsuBrJoMEWsFPVSiFb,
-  database : railway,
+  user: "root",
+  password: "FucZVLgwvCnWLImsuBrJoMEWsFPVSiFb",
+  database: "railway",
   // PORT: 3306,
 });
 
